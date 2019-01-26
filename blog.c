@@ -50,7 +50,7 @@ blog_init(FILE *stream, int level)
 {
 	blog_stream = stream;
 	blog_level = level;
-	blog(BLOG_INFO, "blog initialized (debug level %d - %s)", level, blog_level_names[level]);
+	blog(BLOG_INFO, "blog initialized (level %d - %s)", level, blog_level_names[level]);
 }
 
 void
@@ -72,7 +72,7 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 	}
 #endif
 
-	fprintf(stream, "%s:%d:%s: ", file, line, blog_level_names[level]);
+	fprintf(stream, "[%s] %s:%d: ", blog_level_names[level], file, line);
 
 	va_start(ap, fmt);
 
@@ -80,5 +80,5 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 
 	va_end(ap);
 
-	fprintf(stream, "\n");
+	fputs("\n", stream);
 }
