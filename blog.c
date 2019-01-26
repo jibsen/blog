@@ -26,6 +26,10 @@
 
 #include <stdarg.h>
 
+#ifdef BLOG_TIMESTAMP
+#  include <time.h>
+#endif
+
 FILE *blog_stream = NULL;
 int blog_level = BLOG_INFO;
 
@@ -36,6 +40,10 @@ static const char *blog_level_names[] = {
 	"debug",
 	"trace"
 };
+
+#ifndef ARRAY_SIZE
+#  define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+#endif
 
 void
 blog_init(FILE *stream, int level)
@@ -53,6 +61,16 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 	if (stream == NULL) {
 		stream = stderr;
 	}
+
+#ifdef BLOG_TIMESTAMP
+	char timestamp[32];
+	time_t t = time(NULL);
+	struct tm *lt = localtime(&t);
+
+	if (lt && strftime(timestamp, ARRAY_SIZE(timestamp), "[%Y-%m-%d %H:%M:%S] ", lt)) {
+		fputs(timestamp, stream);
+	}
+#endif
 
 	fprintf(stream, "%s:%d:%s: ", file, line, blog_level_names[level]);
 
