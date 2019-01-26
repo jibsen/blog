@@ -57,23 +57,21 @@ __attribute__((format(printf, 5, 6)))
 void
 blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fmt, ...);
 
-#if defined(NBLOG)
-
-#define blog(level, ...) ((void) 0)
-
-#else
-
-#define blog(level, ...) \
-	do { \
-		if ((level) <= blog_level) { \
-			blog_fprintf(blog_stream, __FILE__, __LINE__, level, __VA_ARGS__); \
-		} \
-	} while (0)
-
-#endif
-
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
 #endif /* BLOG_H_INCLUDED */
+
+#undef blog
+
+#ifdef NBLOG
+#  define blog(level, ...) ((void) 0)
+#else /* NBLOG */
+#  define blog(level, ...) \
+	do { \
+		if ((level) <= blog_level) { \
+			blog_fprintf(blog_stream, __FILE__, __LINE__, level, __VA_ARGS__); \
+		} \
+	} while (0)
+#endif /* NBLOG */
