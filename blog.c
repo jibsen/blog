@@ -22,6 +22,22 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#ifdef BLOG_NO_LOCKING
+#  define flockfile(stream) ((void) 0)
+#  define funlockfile(stream) ((void) 0)
+#else
+#  ifdef _WIN32
+#    define flockfile(stream) _lock_file(stream)
+#    define funlockfile(stream) _unlock_file(stream)
+#  else
+#    define _POSIX_C_SOURCE 200809L
+#    include <unistd.h>
+#    if !defined(_POSIX_THREAD_SAFE_FUNCTIONS) || (_POSIX_THREAD_SAFE_FUNCTIONS - 0 <= 0)
+#      error "blog locking requires POSIX flockfile"
+#    endif
+#  endif
+#endif
+
 #include "blog.h"
 
 #include <stdarg.h>
@@ -62,6 +78,8 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 		stream = stderr;
 	}
 
+	flockfile(stream);
+
 #ifdef BLOG_TIMESTAMP
 	char timestamp[32];
 	time_t t = time(NULL);
@@ -81,4 +99,6 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 	va_end(ap);
 
 	fputs("\n", stream);
+
+	funlockfile(stream);
 }
