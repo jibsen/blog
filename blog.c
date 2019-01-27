@@ -44,6 +44,9 @@
 
 #ifdef BLOG_TIMESTAMP
 #  include <time.h>
+#  ifdef _WIN32
+#    define localtime_r(t, res) (localtime_s((res), (t)) ? NULL : (res))
+#  endif
 #endif
 
 FILE *blog_stream = NULL;
@@ -82,10 +85,11 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 
 #ifdef BLOG_TIMESTAMP
 	char timestamp[32];
+	struct tm lt;
 	time_t t = time(NULL);
-	struct tm *lt = localtime(&t);
 
-	if (lt && strftime(timestamp, ARRAY_SIZE(timestamp), "[%Y-%m-%d %H:%M:%S] ", lt)) {
+	if (localtime_r(&t, &lt)
+	 && strftime(timestamp, ARRAY_SIZE(timestamp), "[%Y-%m-%d %H:%M:%S] ", &lt)) {
 		fputs(timestamp, stream);
 	}
 #endif
