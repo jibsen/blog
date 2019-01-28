@@ -49,27 +49,39 @@
 #  endif
 #endif
 
-FILE *blog_stream = NULL;
-int blog_level = BLOG_INFO;
-
-static const char *blog_level_names[] = {
-	"error",
-	"warning",
-	"info",
-	"debug",
-	"trace"
-};
-
 #ifndef ARRAY_SIZE
 #  define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 #endif
+
+FILE *blog_stream = NULL;
+int blog_level = BLOG_INFO;
+
+static const char*
+blog_level_name(int level)
+{
+	static const char *level_names[] = {
+		"error",
+		"warning",
+		"info",
+		"debug",
+		"trace"
+	};
+
+	const char *name = "?";
+
+	if (level >= 0 && level < ARRAY_SIZE(level_names)) {
+		name = level_names[level];
+	}
+
+	return name;
+}
 
 void
 blog_init(FILE *stream, int level)
 {
 	blog_stream = stream;
 	blog_level = level;
-	blog(BLOG_INFO, "blog initialized (level %d - %s)", level, blog_level_names[level]);
+	blog(BLOG_INFO, "blog initialized (level %d - %s)", level, blog_level_name(level));
 }
 
 void
@@ -94,7 +106,7 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 	}
 #endif
 
-	fprintf(stream, "[%s] %s:%d: ", blog_level_names[level], file, line);
+	fprintf(stream, "[%s] %s:%d: ", blog_level_name(level), file, line);
 
 	va_start(ap, fmt);
 
