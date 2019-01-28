@@ -55,7 +55,7 @@ __attribute__((format(printf, 5, 6)))
 #  endif
 #endif
 void
-blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fmt, ...);
+blog_fprintf(FILE *stream, const char *file, long line, int level, const char *fmt, ...);
 
 #ifdef __cplusplus
 } /* extern "C" */

@@ -85,7 +85,7 @@ blog_init(FILE *stream, int level)
 }
 
 void
-blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fmt, ...)
+blog_fprintf(FILE *stream, const char *file, long line, int level, const char *fmt, ...)
 {
 	va_list ap;
 
@@ -106,7 +106,7 @@ blog_fprintf(FILE *stream, const char *file, int line, int level, const char *fm
 	}
 #endif
 
-	fprintf(stream, "[%s] %s:%d: ", blog_level_name(level), file, line);
+	fprintf(stream, "[%s] %s:%ld: ", blog_level_name(level), file, line);
 
 	va_start(ap, fmt);
 
