@@ -44,7 +44,7 @@
 
 #ifdef BLOG_TIMESTAMP
 #  include <time.h>
-#  ifdef _WIN32
+#  if defined(_WIN32) && !defined(_POSIX_C_SOURCE)
 #    define localtime_r(t, res) (localtime_s((res), (t)) ? NULL : (res))
 #  endif
 #endif
