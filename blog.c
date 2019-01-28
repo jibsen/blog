@@ -104,6 +104,9 @@ blog_fprintf(FILE *stream, const char *file, long line, int level, const char *f
 	 && strftime(timestamp, ARRAY_SIZE(timestamp), "[%Y-%m-%d %H:%M:%S] ", &lt)) {
 		fputs(timestamp, stream);
 	}
+	else {
+		fputs("[?] ", stream);
+	}
 #endif
 
 	fprintf(stream, "[%s] %s:%ld: ", blog_level_name(level), file, line);
