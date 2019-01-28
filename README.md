@@ -127,7 +127,7 @@ with a timestamp in square brackets.
 By default blog locks the output file while writing to it. This can be
 disabled with `BLOG_NO_LOCKING`.
 
-`BLOG_FLUSH_LEVEL` can be used to set the level at which blog starts to flush
+`BLOG_FLUSH_LEVEL` can be used to set the level up to which blog flushes
 after each write. It defaults to `BLOG_ERROR`.
 
 
