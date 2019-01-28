@@ -63,6 +63,10 @@ blog_fprintf(FILE *stream, const char *file, long line, int level, const char *f
 
 #endif /* BLOG_H_INCLUDED */
 
+#ifndef BLOG_MAX_LEVEL
+#  define BLOG_MAX_LEVEL BLOG_TRACE
+#endif
+
 #undef blog
 
 #ifdef NBLOG
@@ -70,7 +74,7 @@ blog_fprintf(FILE *stream, const char *file, long line, int level, const char *f
 #else /* NBLOG */
 #  define blog(level, ...) \
 	do { \
-		if ((level) <= blog_level) { \
+		if ((level) <= (BLOG_MAX_LEVEL) && (level) <= blog_level) { \
 			blog_fprintf(blog_stream, __FILE__, __LINE__, level, __VA_ARGS__); \
 		} \
 	} while (0)
