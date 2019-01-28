@@ -105,14 +105,6 @@ The output in `log.txt` from the above example might now be something like:
     [trace] llist.c:123: comparing 13 to 19
     [trace] llist.c:135: moving tail of larger elements
 
-If blog is compiled with `BLOG_TIMESTAMP` defined, each line will be prefixed
-with a timestamp in square brackets.
-
-    [2019-01-28 13:08:10] [info] llist.c:114: merging lists
-
-By default blog locks the output file while writing to it. This can be
-disabled by compiling blog with `BLOG_NO_LOCKING`.
-
 
 ### Disabling output
 
@@ -123,6 +115,20 @@ no-op. This works like `NDEBUG` for `assert.h` in that you can include
 Similarly, `BLOG_MAX_LEVEL` can be used to set a compile time logging level
 before including `blog.h`. Any `blog()` above this level do nothing. With
 optimization turned on, most compilers will remove such calls entirely.
+
+
+### Options when compiling blog
+
+If blog is compiled with `BLOG_TIMESTAMP` defined, each line will be prefixed
+with a timestamp in square brackets.
+
+    [2019-01-28 13:08:10] [info] llist.c:114: merging lists
+
+By default blog locks the output file while writing to it. This can be
+disabled with `BLOG_NO_LOCKING`.
+
+`BLOG_FLUSH_LEVEL` can be used to set the level at which blog starts to flush
+after each write. It defaults to `BLOG_ERROR`.
 
 
 ## Notes

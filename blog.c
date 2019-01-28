@@ -49,6 +49,10 @@
 #  endif
 #endif
 
+#ifndef BLOG_FLUSH_LEVEL
+#  define BLOG_FLUSH_LEVEL BLOG_ERROR
+#endif
+
 #ifndef ARRAY_SIZE
 #  define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 #endif
@@ -118,6 +122,10 @@ blog_fprintf(FILE *stream, const char *file, long line, int level, const char *f
 	va_end(ap);
 
 	fputs("\n", stream);
+
+	if (level <= BLOG_FLUSH_LEVEL) {
+		fflush(stream);
+	}
 
 	funlockfile(stream);
 }
